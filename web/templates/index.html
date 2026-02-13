@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloud Cost Governance Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f8;
+        }
+        .box {
+            width: 70%;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            margin-top: 40px;
+            border-radius: 6px;
+        }
+        h2 {
+            text-align: center;
+        }
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 25px;
+            background: #eef;
+            padding: 15px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <h2>Cloud Cost Governance Dashboard</h2>
+    <p style="text-align:center;">Internal AWS Cost Optimization Tool</p>
+
+    <form method="POST">
+        <label>Resource Type</label>
+        <select name="resource" required>
+            <option value="ec2">EC2</option>
+            <option value="s3">S3</option>
+        </select>
+
+        <label>Time Range</label>
+        <select name="days" required>
+            <option value="1">Last 1 Day</option>
+            <option value="7">Last 7 Days</option>
+            <option value="30">Last 30 Days</option>
+        </select>
+
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <h3>Cost Summary</h3>
+        <p><b>Resource:</b> {{ result.resource }}</p>
+        <p><b>Time Range:</b> {{ result.days }} Days</p>
+        <p><b>Total Cost:</b> ${{ result.total_cost }}</p>
+
+        <h3>Optimization Recommendations</h3>
+        {% if result.recommendations %}
+            {% for r in result.recommendations %}
+                <p><b>Status:</b> {{ r.analysis.status }}</p>
+                <p><b>Recommendation:</b> {{ r.analysis.recommendation }}</p>
+                <p><b>Reason:</b> {{ r.analysis.reason }}</p>
+                <p><b>Estimated Weekly Savings:</b> ${{ r.analysis.estimated_weekly_savings }}</p>
+                <hr>
+            {% endfor %}
+        {% else %}
+            <p>No recommendations available.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <footer>
+        © 2026 Cloud Cost Governance Project
+    </footer>
+</div>
+
+</body>
+</html>
