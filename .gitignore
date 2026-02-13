@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
-flask.log
 *.log
+*.pem
 data/
+logs/
 
