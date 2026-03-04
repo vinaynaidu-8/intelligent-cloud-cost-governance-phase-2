@@ -6,10 +6,14 @@ ec2 = boto3.client("ec2")
 s3 = boto3.client("s3")
 rds = boto3.client("rds")
 
+
 def main():
+
     resources = []
 
-    # EC2
+    # -------------------------
+    # Discover EC2
+    # -------------------------
     for r in ec2.describe_instances()["Reservations"]:
         for i in r["Instances"]:
             resources.append({
@@ -18,7 +22,9 @@ def main():
                 "region": ec2.meta.region_name
             })
 
-    # S3
+    # -------------------------
+    # Discover S3
+    # -------------------------
     for b in s3.list_buckets()["Buckets"]:
         resources.append({
             "service": "s3",
@@ -26,7 +32,9 @@ def main():
             "region": "global"
         })
 
-    # RDS
+    # -------------------------
+    # Discover RDS
+    # -------------------------
     for db in rds.describe_db_instances()["DBInstances"]:
         resources.append({
             "service": "rds",
@@ -45,7 +53,8 @@ def main():
         json.dump(data, f, indent=4)
 
     print("Resource discovery completed.")
+    print("Resources discovered:", len(resources))
+
 
 if __name__ == "__main__":
     main()
-
